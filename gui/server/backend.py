@@ -63,19 +63,16 @@ class Backend_Api:
         messages = request.json['meta']['content']['parts']
         # if request.json['internet_access']:
         #     messages[-1]["content"] = get_search_message(messages[-1]["content"])
-        model = request.json.get('model')
-        model = model if model else ""
-        provider = request.json.get('provider', '').replace('g4f.Provider.', '')
-        provider = provider if provider and provider != "Auto" else None
+        # model = request.json.get('model')
+        conversation_id = request.json.get('conversation_id')
+
             
         def try_response():
             try:
                 yield from ChatGpt.create(
-                    url = "" ,
-                    model=model,
+                    conversation_id=conversation_id,
                     messages=messages,
-                    stream=True,
-                    ignore_stream_and_auth=True
+                    stream=True
                 )
             except Exception as e:
                 print(e)

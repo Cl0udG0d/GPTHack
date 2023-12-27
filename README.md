@@ -2,8 +2,13 @@
 更适合中国宝宝体质的GPTHack，免API使用GPT，目前支持3.5
 
 ## 简介
+![](./images/show.jpg)
 
-套用了[gpt4free](https://github.com/xtekky/gpt4free)的web界面,使用fofa-hack采集了公网[chatgpt-web](https://github.com/Chanzhaoyu/chatgpt-web)未授权的地址,然后进行了些许优化
+套用了[gpt4free](https://github.com/xtekky/gpt4free)的web界面
+
+使用fofa-hack采集了公网[chatgpt-web](https://github.com/Chanzhaoyu/chatgpt-web)未授权的地址
+
+然后做了些许优化
 
 > 为什么不直接用gpt4free
 
@@ -26,9 +31,10 @@
 
 ## TODO
 
-+ 心跳定期检测响应时间 
++ GPT上下文设置
++ 心跳定期检测响应时间 重新排序网址
 + 创建新的会话的时候重新创建Session 选择新的url
-+ 加入稳定的GPT4
++ 加入稳定的GPT4,如果你有比较好的GPT4网址,欢迎issue我
 
 
 

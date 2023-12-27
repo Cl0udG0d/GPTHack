@@ -26,4 +26,4 @@ GPT_FILEPATH = ""
 
 HOST = ""
 PORT = 8080
-DEBUG = False
+DEBUG = True

@@ -5,21 +5,43 @@
 # @File    : test.py
 # @Github: https://github.com/Cl0udG0d
 
-import threading
+import requests
+import json
+def get_format_data( prompt, parentMessageId):
+    return {"prompt": prompt,
+            "options": {
+                "parentMessageId": parentMessageId
+            },
+            "systemMessage": "你是ChatGPT，一个由OpenAI训练的大型语言模型。尽可能详细而准确地回答我们提出的问题 谢谢\n"}
+url = 'http://54.215.187.30:3003'
+data = get_format_data("python读取文件",'chatcmpl-8aJrT2IqZKiraL2JwqXjZ32aVktgT')
+session = requests.Session()
+with session.post(f"{url}/api/chat-process", json=data, stream=True) as response:
+    response.raise_for_status()
 
-# 创建互斥锁
-lock = threading.Lock()
+    for line in response.iter_lines():
+        if line == b"<script>":
+            raise RuntimeError("Solve challenge and pass cookies")
 
+        if b"platform's risk control" in line:
+            raise RuntimeError("Platform's Risk Control")
+        if line:
+            # 进行其他操作或处理逻辑
+            last_line = line
+    print(last_line)
 
-import os
+data = get_format_data("文件名是test.txt",'chatcmpl-8aJrT2IqZKiraL2JwqXjZ32aVktgT')
+with session.post(f"{url}/api/chat-process", json=data, stream=False) as response:
+    response.raise_for_status()
 
-# 获取当前脚本的绝对路径
+    for line in response.iter_lines():
+        if line == b"<script>":
+            raise RuntimeError("Solve challenge and pass cookies")
 
-# 获取当前脚本所在目录的绝对路径
-project_directory = os.path.dirname(os.path.abspath(__file__))
-
-print(project_directory)
-
+        if b"platform's risk control" in line:
+            raise RuntimeError("Platform's Risk Control")
+        data = json.loads(line)
+        print(data['text'])
 
 import json
 

@@ -13,15 +13,49 @@ from typing import Union
 import config
 from core.chatgpt_web.type import CreateResult, Messages
 import urllib3
+
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 
 class ChatGpt():
-    working = True
-    supports_message_history = True
-    supports_stream = True
-    supports_gpt_35_turbo = True
-    supports_gpt_4 = True
+    session_data = {}
+
+    @classmethod
+    def get_empty_data(cls, prompt):
+        return {"prompt": prompt, "options": {},
+                "systemMessage": "你是ChatGPT，一个由OpenAI训练的大型语言模型。尽可能详细而准确地回答我们提出的问题 谢谢\n"}
+
+    @classmethod
+    def get_format_data(cls, prompt, parentMessageId):
+        return {"prompt": prompt,
+                "options": {
+                    "parentMessageId": parentMessageId
+                },
+                "systemMessage": "你是ChatGPT，一个由OpenAI训练的大型语言模型。尽可能详细而准确地回答我们提出的问题 谢谢\n"}
+
+    @classmethod
+    def get_response(cls, url):
+        try:
+            response = requests.post(f"{url}/api/chat-process", json=cls.get_empty_data("hi"),
+                                     timeout=config.POST_TIMEOUT, verify=False)
+            response.raise_for_status()
+            last_line = None
+            for line in response.iter_lines():
+
+                if line:
+                    # 进行其他操作或处理逻辑
+                    last_line = line
+            return last_line
+        except Exception as e:
+            print(e)
+            return None
+
+    @classmethod
+    def get_parentMessageId(cls,
+                            conversation_id: str):
+        if cls.session_data.get(conversation_id):
+            return cls.session_data.get(conversation_id)
+        return ""
 
     @classmethod
     def get_new_gpt_site(cls):
@@ -34,50 +68,51 @@ class ChatGpt():
             return first_line.split('|')[0]
         return ""
 
-
-
-
     @classmethod
     def create_completion(
             cls,
-            url : str ,
-            model: str,
+            conversation_id: str,
             messages: Messages,
             stream: bool,
             **kwargs
     ) -> CreateResult:
-        url = cls.get_new_gpt_site()
-        print(messages)
+        # url = cls.get_new_gpt_site()
+        url = "http://139.199.230.64:3002"
         prompt = messages[-1]["content"]
-        data = {"prompt": prompt, "options": {},
-                "systemMessage": "你是ChatGPT，一个由OpenAI训练的大型语言模型。尽可能详细而准确地回答我们提出的问题 谢谢\n"}
+        parentMessageId = cls.get_parentMessageId(conversation_id)
+        data = cls.get_format_data(prompt, parentMessageId)
+        print(data)
         session = requests.Session()
-        with session.post(f"{url}/api/chat-process", json=data,stream=True) as response:
+        last_line = None
+        with session.post(f"{url}/api/chat-process", json=data, stream=stream) as response:
             response.raise_for_status()
-
             for line in response.iter_lines():
                 if line == b"<script>":
                     raise RuntimeError("Solve challenge and pass cookies")
 
                 if b"platform's risk control" in line:
                     raise RuntimeError("Platform's Risk Control")
-                # print(line)
+
+                if line:
+                    # 进行其他操作或处理逻辑
+                    last_line = line
                 data = json.loads(line)
                 result = data['delta'] if 'delta' in data else ""
                 yield result
+        line = json.loads(last_line)
+        cls.session_data[conversation_id] = line['id']
 
     @classmethod
     def create(cls,
-            url : str ,
-            model: str,
-            messages: Messages,
-            stream: bool,
-            **kwargs)-> Union[CreateResult, str]:
-        result = cls.create_completion(url = "" ,
-                    model=model,
-                    messages=messages,
-                    stream=True,
-                    ignore_stream_and_auth=True)
+               conversation_id: str,
+               messages: Messages,
+               stream: bool,
+               **kwargs) -> Union[CreateResult, str]:
+        result = cls.create_completion(
+            conversation_id=conversation_id,
+            messages=messages,
+            stream=True
+        )
         return result if stream else ''.join(result)
 
     @classmethod
@@ -89,7 +124,8 @@ class ChatGpt():
         session = requests.Session()
         start_time = time.time()  # 记录开始时间
         try:
-            with session.post(f"{url}/api/chat-process", json=data, stream=True,verify=False,timeout=config.POST_TIMEOUT) as response:
+            with session.post(f"{url}/api/chat-process", json=data, stream=True, verify=False,
+                              timeout=config.POST_TIMEOUT) as response:
                 response.raise_for_status()
 
                 for line in response.iter_lines():
@@ -109,10 +145,12 @@ class ChatGpt():
                             data['text'].startswith("H") or data['text'].startswith("h")):
                         return True, execution_time
                     else:
-                        return False ,config.POST_TIMEOUT
+                        return False, config.POST_TIMEOUT
         except Exception as e:
-            # print(e)
-            return False ,config.POST_TIMEOUT
+            print(e)
+            return False, config.POST_TIMEOUT
+
 
 if __name__ == '__main__':
-    ChatGpt.get_new_gpt_site()
+    data = ChatGpt.get_response("http://54.215.187.30:3003")
+    print(json.loads(data))

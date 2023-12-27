@@ -5,7 +5,9 @@ __pycache__/
 
 # C extensions
 *.so
-
+.idea
+.idea/
+gpthack.txt
 # Distribution / packaging
 .Python
 build/

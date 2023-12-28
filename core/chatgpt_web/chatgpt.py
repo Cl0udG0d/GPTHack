@@ -21,6 +21,10 @@ class ChatGpt():
     session_data = {}
 
     @classmethod
+    def get_hi_data(cls):
+        return {"prompt": "hi", "options": {},
+                "systemMessage": "你是ChatGPT，一个由OpenAI训练的大型语言模型。尽可能详细而准确地回答我们提出的问题 谢谢\n"}
+    @classmethod
     def get_empty_data(cls, prompt):
         return {"prompt": prompt, "options": {},
                 "systemMessage": "你是ChatGPT，一个由OpenAI训练的大型语言模型。尽可能详细而准确地回答我们提出的问题 谢谢\n"}
@@ -76,8 +80,7 @@ class ChatGpt():
             stream: bool,
             **kwargs
     ) -> CreateResult:
-        # url = cls.get_new_gpt_site()
-        url = "http://139.199.230.64:3002"
+        url = cls.get_new_gpt_site()
         prompt = messages[-1]["content"]
         parentMessageId = cls.get_parentMessageId(conversation_id)
         data = cls.get_format_data(prompt, parentMessageId)
@@ -118,13 +121,10 @@ class ChatGpt():
     @classmethod
     def check_alive(cls,
                     url):
-        prompt = "hi"
-        data = {"prompt": prompt, "options": {},
-                "systemMessage": "你是ChatGPT，一个由OpenAI训练的大型语言模型。尽可能详细而准确地回答我们提出的问题 谢谢\nKnowledge cutoff: 2021-09-01\nCurrent date: 2023-12-26"}
         session = requests.Session()
         start_time = time.time()  # 记录开始时间
         try:
-            with session.post(f"{url}/api/chat-process", json=data, stream=True, verify=False,
+            with session.post(f"{url}/api/chat-process", json=cls.get_hi_data(), stream=True, verify=False,
                               timeout=config.POST_TIMEOUT) as response:
                 response.raise_for_status()
 

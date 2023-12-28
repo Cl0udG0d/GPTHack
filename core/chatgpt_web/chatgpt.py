@@ -51,7 +51,8 @@ class ChatGpt():
                     last_line = line
             return last_line
         except Exception as e:
-            print(e)
+            if config.DEBUG:
+                print(e)
             return None
 
     @classmethod
@@ -84,7 +85,8 @@ class ChatGpt():
         prompt = messages[-1]["content"]
         parentMessageId = cls.get_parentMessageId(conversation_id)
         data = cls.get_format_data(prompt, parentMessageId)
-        print(data)
+        if config.DEBUG:
+            print(data)
         session = requests.Session()
         last_line = None
         with session.post(f"{url}/api/chat-process", json=data, stream=stream) as response:
@@ -147,7 +149,8 @@ class ChatGpt():
                     else:
                         return False, config.POST_TIMEOUT
         except Exception as e:
-            print(e)
+            if config.DEBUG:
+                print(e)
             return False, config.POST_TIMEOUT
 
 

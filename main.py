@@ -6,19 +6,9 @@
 # @Github: https://github.com/Cl0udG0d
 import os
 
-
-
 import config
-from core.chatgpt_web.chatgpt import ChatGpt
 from core.toolkit import get_file_line_count, sort_gpt_sitelist, set_new_gpt_site
 from gui import run_gui
-
-# 创建互斥锁
-
-
-
-
-
 
 
 def init_config():
@@ -26,18 +16,17 @@ def init_config():
     config.GPT_FILEPATH = os.path.join(config.ROOT_DIRECTORY, config.FILENAME)
 
 
-
-
-
 def init():
-    print("初始化中...")
+    if config.DEBUG:
+        print("初始化中...")
     init_config()
     line_count = get_file_line_count()
     if line_count > 0:
         pass
     else:
         set_new_gpt_site()
-    print("初始化结束")
+    if config.DEBUG:
+        print("初始化结束")
 
 
 def test_init():
@@ -45,11 +34,14 @@ def test_init():
         lines = file.readlines()
         for line in lines:
             url = line.strip().split('|')[0]
-            print(url)
+            if config.DEBUG:
+                print(url)
+
 
 def test():
     init()
     test_init()
+
 
 if __name__ == '__main__':
     init()

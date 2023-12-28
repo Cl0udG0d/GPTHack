@@ -3,7 +3,6 @@ from flask      import request, Flask
 
 import config
 from core.chatgpt_web.chatgpt import ChatGpt
-# from .internet  import get_search_message
 
 
 class Backend_Api:
@@ -37,7 +36,8 @@ class Backend_Api:
         }
     
     def error(self):
-        print(request.json)
+        if config.DEBUG:
+            print(request.json)
         
         return 'ok', 200
     
@@ -75,7 +75,8 @@ class Backend_Api:
                     stream=True
                 )
             except Exception as e:
-                print(e)
+                if config.DEBUG:
+                    print(e)
                 yield json.dumps({
                     'code'   : 'G4F_ERROR',
                     '_action': '_ask',

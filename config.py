@@ -5,8 +5,8 @@
 # @File    : config.py
 # @Github: https://github.com/Cl0udG0d
 
-# 定时任务检测时间 心跳时间
-HEARTBEAT_TIME = 60
+# 定时任务检测时间 心跳时间 默认三十分钟检测一次
+HEARTBEAT_TIME = 60*30
 
 # 初始爬取数量
 INIT_SEARCH_NUM = 100
@@ -40,4 +40,4 @@ GPT_ALARM_NUM = 2
 # FLASK 配置相关
 HOST = ""
 PORT = 8080
-DEBUG = True
+DEBUG = False

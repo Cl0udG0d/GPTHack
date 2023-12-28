@@ -51,17 +51,20 @@ def check_gpt_alive():
     submit_thread_task(urllist)
     sort_gpt_sitelist_from_list(temp_site_list)
     temp_site_list = list()
-    print('检验存活结束')
+    if config.DEBUG:
+        print('检验存活结束')
 
 
 def heartbeat():
-    print('定时任务正在执行...')
+    if config.DEBUG:
+        print('定时任务正在执行...')
     if is_connected():
         check_gpt_alive()
         if not check_site_num():
             set_new_gpt_site()
     else:
-        print("网络不通")
+        if config.DEBUG:
+            print("网络不通")
 
 
 scheduler.add_job(

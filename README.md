@@ -37,7 +37,7 @@
 
 安装依赖
 
-`pip install requirements.txt`
+`pip install -r requirements.txt`
 
 运行web服务(第一次运行需要加载GPT地址 花费的时间会稍微比较长)
 

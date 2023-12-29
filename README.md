@@ -17,6 +17,20 @@
 而我只是想要一个能够快速稳定查询的GPT
 
 ## 安装运行
+
+### 运行可执行文件
+下载可执行文件(仅支持windows)
+
+`https://github.com/Cl0udG0d/GPTHack/releases`
+
+命令行运行,等待初始化结束之后访问 http://127.0.0.1:8080
+```shell
+.\GPTHack.exe
+```
+
+![](./images/shell.jpg)
+
+### 代码运行
 下载项目
 
 `git clone https://github.com/Cl0udG0d/GPTHack`
@@ -31,10 +45,7 @@
 
 ## TODO
 
-+ ~~GPT上下文设置~~
-+ ~~心跳定期检测响应时间 重新排序网址 网址过少的时候自动重新获取~~
-+ 创建新的会话的时候重新创建Session 选择新的url
-+ 生成可执行文件
++ 排查一些BUG
 + 加入稳定的GPT4,如果你有比较好的GPT4网址,欢迎issue我
 
 

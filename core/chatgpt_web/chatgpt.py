@@ -149,8 +149,7 @@ class ChatGpt():
                     else:
                         return False, config.POST_TIMEOUT
         except Exception as e:
-            if config.DEBUG:
-                print(e)
+            print(e)
             return False, config.POST_TIMEOUT
 
 

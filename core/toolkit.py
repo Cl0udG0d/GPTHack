@@ -73,8 +73,7 @@ def get_gpt_site():
 
 # 重置gpt地址
 def set_new_gpt_site():
-    if config.DEBUG:
-        print('GPT地址重置')
+    print('GPT地址重置')
     for sitelist in get_gpt_site():
         submit_thread_task(sitelist)
     sort_gpt_sitelist()

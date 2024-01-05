@@ -1,8 +1,7 @@
 import sys
 
-if getattr(sys, 'frozen', False):
-    # 在可执行文件中运行
-    print("当前是可执行文件（exe）运行状态")
-else:
-    # 在 Python 文件中运行
-    print("当前是Python文件运行状态")
+from core.chatgpt_web.chatgpt import ChatGpt
+
+site = "http://117.30.72.160:8005"
+version_flag = ChatGpt.check_gpt_version(site)
+print(version_flag)

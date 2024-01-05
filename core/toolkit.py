@@ -56,9 +56,10 @@ def sort_gpt_sitelist_from_list(urllist):
 def save_site(site):
     alive, execution_time = ChatGpt.check_alive(site)
     if alive:
-        with lock:
-            with open(config.FILENAME, "a") as file:
-                file.write(f"{site}|{execution_time}\n")
+        if ChatGpt.check_gpt_version(site):
+            with lock:
+                with open(config.FILENAME, "a") as file:
+                    file.write(f"{site}|{execution_time}\n")
 
 
 def submit_thread_task(sitelist):

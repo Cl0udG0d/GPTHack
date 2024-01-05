@@ -30,6 +30,11 @@ class ChatGpt():
                 "systemMessage": "你是ChatGPT，一个由OpenAI训练的大型语言模型。尽可能详细而准确地回答我们提出的问题 谢谢\n"}
 
     @classmethod
+    def get_version_data(cls):
+        return {"prompt": "你的GPT版本是多少 请详细回答", "options": {},
+                "systemMessage": "你是ChatGPT，一个由OpenAI训练的大型语言模型。尽可能详细而准确地回答我们提出的问题 谢谢\n"}
+
+    @classmethod
     def get_format_data(cls, prompt, parentMessageId):
         return {"prompt": prompt,
                 "options": {
@@ -151,6 +156,35 @@ class ChatGpt():
         except Exception as e:
             print(e)
             return False, config.POST_TIMEOUT
+
+    @classmethod
+    def check_gpt_version(cls,
+                          url):
+        session = requests.Session()
+        try:
+            with session.post(f"{url}/api/chat-process", json=cls.get_version_data(), stream=True, verify=False,
+                              timeout=config.POST_TIMEOUT) as response:
+                response.raise_for_status()
+
+                for line in response.iter_lines():
+                    last_line = None
+
+                    if line:
+                        # 进行其他操作或处理逻辑
+                        last_line = line
+
+                if last_line is not None:
+                    data = json.loads(last_line)
+                    # print(data)
+                    if 'text' in data and data['text'] != "" and "3.5" in data['text']:
+                        if config.DEBUG:
+                            print(f"site {url} gpt is 3.5")
+                        return True
+                    else:
+                        return False
+        except Exception as e:
+            print(e)
+            return False
 
 
 if __name__ == '__main__':

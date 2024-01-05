@@ -9,7 +9,7 @@
 HEARTBEAT_TIME = 60*30
 
 # 初始爬取数量
-INIT_SEARCH_NUM = 100
+INIT_SEARCH_NUM = 200
 
 # FOFA搜索关键字
 FOFA_SEARCH_KEY = 'title=="ChatGPT Web"'
@@ -21,7 +21,7 @@ VERSION = '0.0.1'
 POST_TIMEOUT = 6
 
 # 线程池数量
-THREADPOOL_NUM = 10
+THREADPOOL_NUM = 20
 
 # 可用GPT存储文本名称
 FILENAME = "gpthack.txt"
@@ -34,7 +34,7 @@ GPT_FILEPATH = ""
 # 测试连通性域名
 TEST_CONNECT_URL = "www.baidu.com"
 
-GPT_ALARM_NUM = 2
+GPT_ALARM_NUM = 1
 
 #=======================================================================================================================
 # FLASK 配置相关

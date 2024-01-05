@@ -20,7 +20,7 @@ lock = threading.Lock()
 
 
 def check_site_num():
-    return True if get_file_line_count() > config.GPT_ALARM_NUM else False
+    return get_file_line_count() > config.GPT_ALARM_NUM
 
 
 def save_site2list(site):

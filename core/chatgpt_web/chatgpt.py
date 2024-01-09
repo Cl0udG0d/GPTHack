@@ -24,6 +24,7 @@ class ChatGpt():
     def get_hi_data(cls):
         return {"prompt": "hi", "options": {},
                 "systemMessage": "你是ChatGPT，一个由OpenAI训练的大型语言模型。尽可能详细而准确地回答我们提出的问题 谢谢\n"}
+
     @classmethod
     def get_empty_data(cls, prompt):
         return {"prompt": prompt, "options": {},
@@ -149,7 +150,8 @@ class ChatGpt():
                     data = json.loads(last_line)
                     # print(data)
                     if 'text' in data and data['text'] != "" and (
-                            data['text'].startswith("H") or data['text'].startswith("h")):
+                            data['text'].startswith("H") or data['text'].startswith("h"))\
+                            and 'delta' in data:
                         return True, execution_time
                     else:
                         return False, config.POST_TIMEOUT

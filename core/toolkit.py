@@ -24,20 +24,23 @@ def get_file_line_count():
 
 
 def sort_gpt_sitelist():
-    with open(config.FILENAME, "r+") as file:
-        lines = file.readlines()
+    if os.path.exists(config.FILENAME):
+        with open(config.FILENAME, "r+") as file:
+            lines = file.readlines()
 
-        # 将每行的数据拆分成元组 (line, number)，并按照数字进行排序
-        sorted_lines = sorted(lines, key=lambda x: float(x.split("|")[1]))
+            # 将每行的数据拆分成元组 (line, number)，并按照数字进行排序
+            sorted_lines = sorted(lines, key=lambda x: float(x.split("|")[1]))
 
-        # 清空文件内容
-        file.seek(0)
-        file.truncate()
+            # 清空文件内容
+            file.seek(0)
+            file.truncate()
 
-        # 写入排序结果到文件
-        for line in sorted_lines:
-            file.write(f"{line}")
-
+            # 写入排序结果到文件
+            for line in sorted_lines:
+                file.write(f"{line}")
+    else:
+        print("[-] 文件不存在 ")
+        exit(0)
 
 def sort_gpt_sitelist_from_list(urllist):
     with open(config.FILENAME, "r+") as file:
